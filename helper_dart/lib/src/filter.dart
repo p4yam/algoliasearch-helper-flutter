@@ -69,8 +69,8 @@ abstract class Filter {
 
   /// Creates [FilterTag] instance.
   @factory
-  static FilterTag tag(String value, [bool isNegated = false]) =>
-      FilterTag._(value, isNegated);
+  static FilterTag tag(String attribute, [bool isNegated = false]) =>
+      FilterTag._(attribute, isNegated);
 
   /// Creates [FilterNumeric] instance as numeric comparison.
   @factory
@@ -164,15 +164,15 @@ class FilterFacet implements Filter {
 /// It uses a reserved keywords `_tags` as [attribute].
 class FilterTag implements Filter {
   /// Creates [FilterTag] instance.
-  const FilterTag._(this.value, [this.isNegated = false]);
+  const FilterTag._(this.attribute, [this.isNegated = false]);
 
   @override
-  final String attribute = '_tags';
+  final String attribute;
   @override
   final bool isNegated;
 
   /// Filter tag value.
-  final String value;
+  // final String value;
 
   @override
   bool operator ==(Object other) =>
@@ -180,26 +180,24 @@ class FilterTag implements Filter {
       other is FilterTag &&
           runtimeType == other.runtimeType &&
           attribute == other.attribute &&
-          isNegated == other.isNegated &&
-          value == other.value;
+          isNegated == other.isNegated;
 
   @override
-  int get hashCode => attribute.hashCode ^ isNegated.hashCode ^ value.hashCode;
+  int get hashCode => attribute.hashCode ^ isNegated.hashCode;
 
   @override
   String toString() => 'FilterTag{'
       ' attribute: $attribute,'
-      ' isNegated: $isNegated,'
-      ' value: $value'
+      ' isNegated: $isNegated'
       '}';
 
   /// Make a copy of the tag filter.
   FilterTag copyWith({
-    String? value,
+    String? attribute,
     bool? isNegated,
   }) =>
       FilterTag._(
-        value ?? this.value,
+        attribute ?? this.attribute,
         isNegated ?? this.isNegated,
       );
 
