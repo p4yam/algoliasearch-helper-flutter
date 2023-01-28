@@ -39,6 +39,8 @@ class SearchState {
     this.sumOrFiltersScore,
     this.tagFilters,
     this.userToken,
+    this.distinct=0,
+    this.clickAnalytics=false,
   });
 
   /// Index name
@@ -114,6 +116,9 @@ class SearchState {
   /// Whether the current query will be taken into account in the Analytics.
   final bool? analytics;
 
+  final int? distinct;
+  final bool? clickAnalytics;
+
   /// Make a copy of the search state.
   SearchState copyWith({
     List<String>? attributesToHighlight,
@@ -138,10 +143,14 @@ class SearchState {
     int? maxFacetHits,
     int? maxValuesPerFacet,
     int? page,
+    int? distinct,
+    bool? clickAnalytics,
   }) =>
       SearchState(
+        distinct: distinct ?? this.distinct,
+        clickAnalytics: clickAnalytics ?? this.clickAnalytics,
         attributesToHighlight:
-            attributesToHighlight ?? this.attributesToHighlight,
+        attributesToHighlight ?? this.attributesToHighlight,
         attributesToRetrieve: attributesToRetrieve ?? this.attributesToRetrieve,
         attributesToSnippet: attributesToSnippet ?? this.attributesToSnippet,
         facetFilters: facetFilters ?? this.facetFilters,
@@ -168,34 +177,37 @@ class SearchState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SearchState &&
-          runtimeType == other.runtimeType &&
-          indexName == other.indexName &&
-          query == other.query &&
-          page == other.page &&
-          hitsPerPage == other.hitsPerPage &&
-          facets.equals(other.facets) &&
-          disjunctiveFacets.equals(other.disjunctiveFacets) &&
-          filterGroups.equals(other.filterGroups) &&
-          ruleContexts.equals(other.ruleContexts) &&
-          facetFilters.equals(other.facetFilters) &&
-          attributesToHighlight.equals(other.attributesToHighlight) &&
-          attributesToRetrieve.equals(other.attributesToRetrieve) &&
-          attributesToSnippet.equals(other.attributesToSnippet) &&
-          highlightPostTag == other.highlightPostTag &&
-          highlightPreTag == other.highlightPreTag &&
-          maxFacetHits == other.maxFacetHits &&
-          maxValuesPerFacet == other.maxValuesPerFacet &&
-          numericFilters.equals(other.numericFilters) &&
-          optionalFilters.equals(other.optionalFilters) &&
-          sumOrFiltersScore == other.sumOrFiltersScore &&
-          tagFilters.equals(other.tagFilters) &&
-          analytics == other.analytics &&
-          userToken == other.userToken;
+          other is SearchState &&
+              runtimeType == other.runtimeType &&
+              indexName == other.indexName &&
+              query == other.query &&
+              clickAnalytics == other.clickAnalytics &&
+              page == other.page &&
+              distinct == other.distinct &&
+              hitsPerPage == other.hitsPerPage &&
+              facets.equals(other.facets) &&
+              disjunctiveFacets.equals(other.disjunctiveFacets) &&
+              filterGroups.equals(other.filterGroups) &&
+              ruleContexts.equals(other.ruleContexts) &&
+              facetFilters.equals(other.facetFilters) &&
+              attributesToHighlight.equals(other.attributesToHighlight) &&
+              attributesToRetrieve.equals(other.attributesToRetrieve) &&
+              attributesToSnippet.equals(other.attributesToSnippet) &&
+              highlightPostTag == other.highlightPostTag &&
+              highlightPreTag == other.highlightPreTag &&
+              maxFacetHits == other.maxFacetHits &&
+              maxValuesPerFacet == other.maxValuesPerFacet &&
+              numericFilters.equals(other.numericFilters) &&
+              optionalFilters.equals(other.optionalFilters) &&
+              sumOrFiltersScore == other.sumOrFiltersScore &&
+              tagFilters.equals(other.tagFilters) &&
+              analytics == other.analytics &&
+              userToken == other.userToken;
 
   @override
   int get hashCode =>
       indexName.hashCode ^
+      clickAnalytics.hashCode ^
       query.hashCode ^
       page.hashCode ^
       hitsPerPage.hashCode ^
@@ -216,13 +228,16 @@ class SearchState {
       sumOrFiltersScore.hashCode ^
       tagFilters.hashing() ^
       analytics.hashCode ^
+      distinct.hashCode ^
       userToken.hashCode;
 
   @override
   String toString() => 'SearchState{'
       'indexName: $indexName, '
+      'clickAnalytics: $clickAnalytics, '
       'query: $query, '
       'analytics: $analytics, '
+      'distinct: $distinct, '
       'attributesToHighlight: $attributesToHighlight, '
       'attributesToRetrieve: $attributesToRetrieve, '
       'attributesToSnippet: $attributesToSnippet, '

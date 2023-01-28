@@ -89,10 +89,17 @@ class AlgoliaSearchService implements HitsSearchService {
 }
 
 /// Extensions over [Algolia] client.
+/// Added distinct to the query.
 extension AlgoliaExt on Algolia {
   /// Create [AlgoliaQuery] instance based on [state].
   AlgoliaQuery queryOf(SearchState state) {
     AlgoliaQuery query = index(state.indexName);
+    state.distinct?.let((it) => query = query.setDistinct(value: it));
+    state.clickAnalytics?.let(
+      (it) => query = query.setClickAnalytics(
+        enabled: it,
+      ),
+    );
     state.analytics?.let((it) => query = query.setAnalytics(enabled: it));
     state.attributesToHighlight
         ?.let((it) => query = query.setAttributesToHighlight(it));
